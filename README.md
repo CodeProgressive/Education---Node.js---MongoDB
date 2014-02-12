@@ -4,8 +4,8 @@ Both Node.js and MongoDB are growing in popularity and are slowly but surely bec
 
 ##Time table
 
-Week  | Date and time | Title | Difficulty
------ | ------------- | ----- | ----------
+Workshop | Date and time | Title | Difficulty
+-------- | ------------- | ----- | ----------
 1 | Feb 13 2014 14:30 - 16:00 | Node.js - Introduction, a (synchronous) world of callbacks | Easy
 2 | Feb 27 2014 14:30 - 16:00 | Node.js - NPM, be part of the community and your first real app | Easy
 3 | March 6 2014 14:30 - 16:00 | Node.js - On the express line, the fastest way to the web | Medium
