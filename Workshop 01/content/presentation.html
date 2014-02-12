@@ -288,14 +288,40 @@ function getRecord(id, callback) {
                     <section>
                         <h2>The first challange</h2>
                         <h3>Write a letter, developer style!</h3>
-
-                        <ul>
-                            Download our letter.txt
-                        </ul>
+                        <hr/>
+                        <p>Create a node script that echoes out the entire letter with your name added to the end of the letter.</p>
+                        <h6><small>Use the script to add your name! Don't do it manually!</small></h6>
+                        <hr/>
+                        <h4>Extra challenge</h4>
+                        <p><small>Make the script watch the file for changes and echo the new file if that occurs.</small></p>
                     </section>
                     <section>
+                        <h2>The solution!</h2>
 
+                        <pre><code data-trim class="javascript" contenteditable>
+var fs = require("fs");
+
+var name = "Ricardo Snoek"
+
+var loadLetter = function(callback) {
+    fs.readFile("letter.txt", callback);
+};
+
+var processLetter = function(error, data) {
+    if (error)
+        return console.error(error);
+    else
+        console.log(data + name);
+};
+
+loadLetter(processLetter);
+                        </code></pre>
                     </section>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you in two weeks!</h4>
+                    <h5>Node.js - NPM, be part of the community and your first real app</h5>
                 </section>
             </div>
 
