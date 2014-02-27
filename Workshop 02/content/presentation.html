@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <section>
+                        <h2>Repetition : Callbacks</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+var callback = function ( err, data ) {
+
+    if ( err )
+        return console.error( err );
+
+    console.log( data );
+};
+
+fs.readFile( 'test.txt' , callback );
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Modules</h2>
+                        <h4>You don't need everything all the time</h4>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Load the filesystem module
+var fs = require( "fs" );
+                        </code></pre>
+                    <a href="http://nodejs.org/api/" target="_blank">Documentation: http://nodejs.org/api/</a>
+                    </section>
+                </section>
+                <section>
+                    <h2>Get coding help</h2>
+                    <h4>Autocomplete is your friend!</h4>
+                    <h4><small>Recommended editors:</small></h4>
+                    <ul>
+                        <li>PHP Storm: <a href="http://goo.gl/6wRMg1">http://goo.gl/6wRMg1</a></li>
+                        <li>Netbeans: <a href="http://goo.gl/4lx5Wg">http://goo.gl/4lx5Wg</a></li>
+                        <li>Sublime Text: <a href="http://goo.gl/1V90YC">http://goo.gl/1V90YC</a></li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h2>Be a commander</h2>
+                        <h4>Everything is powered by the command line.</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Relative Path:
+$ cd folder/
+
+# Absolute Path:
+$ cd /folder/
+
+# Parent Folder:
+$ cd ..
+
+# Folder contents:
+$ ls
+
+# Start node:
+$ node "[js filename]" "[parameters]"
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Node Package Manager</h2>
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/npm.png"/>
+                    <h4></h4>
+                </section>
+                <section>
+                    <section>
+                    <h2>Case : Cordova & Phonegap</h2>
+                        <img style="border: none !important; box-shadow: none !important;" src="assets/img/cordova_bot.png"/>
+                        <img style="border: none !important; box-shadow: none !important; max-height: 359px;" src="assets/img/phonegap_bot.png"/>
+                    </section>
+                    <section>
+                        <h2>Example : Installing Cordova</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# Basic installation:
+$ npm install cordova
+
+# Global installation:
+$ npm install -g cordova
+
+# Installation with version:
+$ npm install -g cordova@3.4.0
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Example : Installing Phonegap</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# Basic installation:
+$ npm install phonegap
+
+# Global installation:
+$ npm install -g phonegap
+
+# Installation with version:
+$ npm install -g phonegap@2.9.1
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>It's a minor technicality</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# Installation of modules:
+$ npm install "[npm options]" "[package]" "[package version]"
+
+# Update a modules:
+$ npm update "[npm options]" "[package]" "[package version]"
+
+# Removal of modules:
+$ npm remove "[npm options]" "[package]"
+
+# Publishing modules:
+$ npm publish "[package]"
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                    <h2>Let's cut the crap</h2>
+                    <h5>Create an app that using <u>moment</u> and <u>colors</u>.</h5>
+
+                    <ul>
+                        <li>Install packages <u>moment</u> & <u>colors,</u></li>
+                        <li>Use 'command line arguments' to insert your name,</li>
+                        <li>Display the text shown below using atleast two colors.</li>
+                    </ul>
+
+                    <pre><code data-trim class="bash" contenteditable>
+$ node app [Name]
+
+$ "Hi [Name], it’s [Current time] right now!"</code></pre>
+                    </section>
+                    <section>
+                        <h2>The answer</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Require some node modules
+var colors = require("colors"),
+    moment = require("moment");
+
+// If no name is inserted, stop the node and show an error
+if(typeof process.argv[2] == 'undefined') {
+    console.log("Please insert your name".red);
+    // Exit using 1 means there was an error
+    process.exit(1);
+}
+
+// Create the strings to show
+var greet = "Hi " + process.argv[2],
+    time = "it’s " + moment().format('MMMM Do YYYY, h:mm:ss a') + " right now!";
+
+// Now show them while adding the color
+console.log(greet.green + ", " + time.yellow);
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Automate your installation</h2>
+                    <h5>Use a package.json, then sit back and relax.</h5>
+                    <pre><code data-trim class="json" contenteditable>
+{
+    "name": "modulename",
+    "description": "Foo for bar",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/mixu/modulename.git"
+    },
+    "dependencies": {
+        "underscore": "1.1.x",
+        "foo": "git+ssh://git@github.com:mixu/foo.git#0.4.1",
+        "bar": "git+ssh://git@github.com:mixu/bar.git#master"
+    },
+    "private": true
+}
+                    </code></pre>
+                    <h5>Install all dependencies</h5>
+                        <pre><code data-trim class="bash" contenteditable>
+$ npm install
+                        </code></pre>
+
+                    <h5><a href="http://goo.gl/bzpKLO">http://goo.gl/bzpKLO</a></h5>
+                </section>
+                <section>
+                    <section>
+                    <h2>Exporting & requiring</h2>
+                    <h3>Requiring</h3>
+                    <h5>Smart searching trough your application</h5>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Add an installed module, either global or local
+var colors = require( "colors" );
+
+// Load a file called colors, from the root folder
+var colors = require( "./colors.js" );
+                    </code></pre>
+                    </section>
+                    <section>
+                        <h3>Exporting</h3>
+                        <h5>Smuggle your dope shit and hide your tracks</h5>
+                        <pre><code data-trim class="javascript" contenteditable="">
+// Exporting parts of your file
+module.exports = {
+    "shit": function(){
+        return "Try some of my dope shit!"
+    }
+}
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Load a file called dope, from the root folder
+var dope = require( "./dope.js" );
+
+// Returns some dope shit to the console
+console.log(dope.shit());
+                    </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Doing it safely, with protection</h2>
+                    <h5>Keep your code healthy, you can't trust anyone</h5>
+                    <pre><code data-trim class="javascript" contenteditable>
+var dope = (function() {
+
+    var self = {};
+
+    // This is publicly available, accessible by dope.shit()
+    self.shit = function() {
+        return safeShit();
+    }
+
+    // This is private and object only, accessible by dope.shit()
+    var safeShit = function() {
+        return "This is really safe, no one can mess with your shit!";
+    }
+
+    return self;
+
+})();
+
+// Exporting public parts only
+module.exports = dope;
+                    </code></pre>
+                </section>
+            <section>
+                <section>
+                    <h2>The last assignment</h2>
+                    <h5>Create a tweet logger, so we can later give it to the NSA.</h5>
+
+                    <ul style="font-size: 0.7em; line-height: 1em;">
+                        <li>Let the application wait for command line input,</li>
+                        <li>Connect to <u>Twitter API</u> and fetch 5 tweets searching by input,</li>
+                        <li>Log the tweets and save them in a file with the input name,</li>
+                        <li>After searching is finished wait for another input,</li>
+                        <li>You are <u>REQUIRED</u> to put functions in different files.</li>
+                    </ul>
+                    <div class="fragment" style="margin-top: 20px;">
+                        <h5>For the diehards</h5>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Make sure no tweets are saved twice,</li>
+                            <li>Search the <u>Instagram API</u> for related images and save them,</li>
+                            <li>Create a variable fetch count, instead of 5.</li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Let's create some rocket science</h2>
+                </section>
+            </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>Node.js - On the express line, the fastest way to the web</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
