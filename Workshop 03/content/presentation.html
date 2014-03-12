@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <h2>Awesome stuff!</h2>
+                    <h4>New Node.JS Website! (Except for the docs) <a href="http://nodejs.org" target="_blank">(link)</a></h4>
+                    <h4>Popcorn Time (getpopcornti.me) <a href="http://getpopcornti.me" target="_blank">(link)</a></h4>
+                </section>
+                <section>
+                    <section>
+                        <h2>Repetition : NPM</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# Installation of modules:
+$ npm install "[npm options]" "[package]" "[package version]"
+
+# Update a modules:
+$ npm update "[npm options]" "[package]" "[package version]"
+
+# Removal of modules:
+$ npm remove "[npm options]" "[package]"
+
+# Publishing modules:
+$ npm publish "[package]"
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Package.json</h2>
+                        <pre><code data-trim class="json" contenteditable>
+    {
+        "name": "modulename",
+        "description": "Foo for bar",
+        "version": "0.0.1",
+        "repository": {
+            "type": "git",
+            "url": "git://github.com/mixu/modulename.git"
+        },
+        "dependencies": {
+            "underscore": "1.1.x",
+            "foo": "git+ssh://git@github.com:mixu/foo.git#0.4.1",
+            "bar": "git+ssh://git@github.com:mixu/bar.git#master"
+        },
+        "private": true
+    }
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Exporting</h2>
+                        <pre><code data-trim class="javascript" contenteditable="">
+// Exporting parts of your file
+module.exports = {
+    "shit": function(){
+        return "Try some of my dope shit!"
+    }
+}
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Load a file called dope, from the root folder
+var dope = require( "./dope.js" );
+
+// Returns some dope shit to the console
+console.log(dope.shit());
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Encapsulation</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+var dope = (function() {
+
+    var self = {};
+
+    // This is publicly available, accessible by dope.shit()
+    self.shit = function() {
+        return safeShit();
+    }
+
+    // This is private and object only, accessible by dope.shit()
+    var safeShit = function() {
+        return "This is really safe, no one can mess with your shit!";
+    }
+
+    return self;
+
+})();
+
+// Exporting public parts only
+module.exports = dope;
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>NSA Twitter / Instagram scraper</h2>
+                    <h4>Want to see how it works?</h4>
+                </section>
+                <section>
+                    <section>
+                        <h2>Let's talk webservers</h2>
+                        <h5>Finally no more console applications!</h5>
+                    </section>
+                    <section>
+                        <h3>Dit anyone see the code for this presentation?</h3>
+                        <h5>Open app.js and witness a simplified web server in node.</h5>
+                    </section>
+                </section>
+                <section>
+                    <h2>How to use http</h2>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Require the http node module
+var http = require('http'),
+    port = 8080;
+
+// http.createServer is asynchronous so we need a callback
+http.createServer(function (req, res) {
+
+  // Make sure you send the right header and content
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+
+}).listen(port);
+                    </code></pre>
+                </section>
+                <section>
+                    <section>
+                        <h2>Assignment: Let's try it out!</h2>
+                        <h4>Create a small webserver with two different pages:</h4>
+                        <ul>
+                            <li>
+                                When no specific page is requested, show "Hello World!"
+                            </li>
+                            <li>
+                                On request: /awesome, show "Awesome!"<br/>
+                                <small>The request being: http://localhost:port/awesome</small>
+                            </li>
+                            <li>
+                                Encapsulate the sh*t out of it!
+                            </li>
+                            <li>
+                                Make sure you catch every possible error!
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>A bit harder than expected right?</h2>
+                        <h5>Here it is...</h5>
+                    <pre><code data-trim class="javascript" contenteditable>
+(function(){
+    var self = {};
+
+    var http = require("http"),
+        url = require("url"),
+        server;
+
+    var startServer = function(config, callback) {
+        if (typeof config === "object") {
+            server = http.createServer(function(req, res) {
+                if (typeof callback === "function")
+                    callback(req, res);
+                else
+                    console.log("No request handler given.");
+            }).listen(config.port, config.ip);
+
+            if(typeof server === "object")
+                console.log("The server is running: " + config.ip + ":" + config.port);
+            else
+                console.log("The server could not start.");
+        } else
+            console.log("No configuration file was given.");
+    };
+
+    var parseRequests = function(req, res) {
+        switch (url.parse(req.url).path){
+            case "/awesome":
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.end("Awesome!");
+                break;
+            default:
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.end("Hello World!");
+                break;
+        };
+    };
+
+    (function(){
+        startServer({
+            ip: "127.0.0.1",
+            port: 1337
+        }, function(req, res){
+            parseRequests(req, res)
+        });
+    }());
+
+    return self;
+})();
+                    </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>But what if...</h2>
+                    <h4>it gets more complicated?</h4>
+                    <ul>
+                        <li>we need a PUT, POST or DELETE request?</li>
+                        <li>we need to read the POST body?</li>
+                        <li>we need a lot of routes?</li>
+                        <li>we want to use an MVC pattern?</li>
+                    </ul>
+                </section>
+                <section data-background="#c0392b" data-transition="zoom">
+                    <h2 style="color: #fff;">Damn that's a lot of code...</h2>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">Don't worry, there's a solution!</h2>
+                </section>
+                <section>
+                    <h2>Express</h2>
+                    <h3>Web application framework for node</h3>
+                    <h5><a href="http://expressjs.com/3x/api.html" target="_blank">http://expressjs.com/3x/api.html</a></h5>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Require the module express and initialize it into the app variable
+var express = require('express'),
+    app = express();
+
+// Specify the routes
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+
+// Start the server
+app.listen(8080);
+                    </code></pre>
+                </section>
+                <section>
+                        <h2>Express: Routes</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.get('/register', function(req, res) {
+    // ...
+    res.send('...');
+});
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.post('/register', function(req, res) {
+    var username = req.body.username,
+        email = req.body.email;
+    // ...
+});
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.put('/user/:id', function(req, res){
+    // ...
+});
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.del('/user/:id', function(req, res){
+    // ...
+});
+                        </code></pre>
+                </section>
+                <section>
+                    <section>
+                        <h2>Express: Request and Response</h2>
+                        <h5>Almost every callback within express has both</h5>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.get('/register', function(req, res) {
+    // ...
+    res.send('...');
+});
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Express: Request object</h2>
+                    <h5>Most used request methods: </h5>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.get('/user/:name', function(req, res) {
+
+    // GET /user/jimmy
+    req.params.name
+    // => "jimmy"
+
+    // GET /user/ricardo
+    req.params[0]
+    // => "user/ricardo"
+});
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+// GET /search?q=hi+jimmy
+req.query.q
+// => "hi jimmy"
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+// POST { "name": "ricardo" }
+req.body.name
+// => "ricardo"
+                        </code></pre>
+                        <a href="http://goo.gl/L73SMz" target="_blank">http://goo.gl/L73SMz</a>
+                    </section>
+                    <section>
+                        <h2>Express: Response object</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+res.status(404).sendfile('path/to/404.png');
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+res.send('<h1>Hello world!</h1>');
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Makes use of the set engine in express
+res.render('user', { name: 'Jimmy' }, function(err, html){
+    res.send(html);
+});
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+res.redirect('/foo/bar');
+res.redirect('http://example.com');
+res.redirect(301, 'http://example.com');
+res.redirect('../login');
+                        </code></pre>
+                        <a href="http://goo.gl/pgEHWp" target="_blank">http://goo.gl/pgEHWp</a>
+                    </section>
+                </section>
+                <section>
+                    <h2>Express: Middleware</h2>
+                    <h3>Helper objects before the actual routes</h3>
+                    <h5>Most used middleware (almost always): </h5>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.use(express.static('./public'));
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.use(express.bodyParser());
+                        </code></pre>
+                        <pre><code data-trim class="javascript" contenteditable>
+app.use(express.cookieParser('some secret'));
+                        </code></pre>
+                </section>
+                <section>
+                    <h2>Express: Template Engines</h2>
+                    <pre><code data-trim class="javascript" contenteditable>
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+                    </code></pre>
+                    <h5>So much to chose from: <a href="https://github.com/joyent/node/wiki/modules#wiki-templating" target="_blank">http://goo.gl/MIs6OM</a></h5>
+                    <h5>We recommend either of the following:</h5>
+                    <ul>
+                        <li>Handlebars</li>
+                        <li>EJS</li>
+                        <li>Jade</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h2>The last assignment</h2>
+                        <h5>Create an API with Express</h5>
+                        <h4><small>If you know how, then make it RESTful</small></h4>
+
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Write an object that can read / write .json files</li>
+                            <li>Create at least two head routes containing at least one parameter</li>
+                            <li>Return data from the .json files in json format according to the route</li>
+                            <li>When the data doesn't exist, return a nice error json object</li>
+                        </ul>
+                        <div class="fragment" style="margin-top: 20px;">
+                            <h5>For the diehards</h5>
+                            <ul style="font-size: 0.7em; line-height: 1em;">
+                                <li>Use a template engine to render out API documentation</li>
+                                <li>Create a POST method to insert new .json data</li>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>Node.js - Wool sock(et)s, keeping everybody warm</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>

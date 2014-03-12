@@ -1,0 +1,20 @@
+{
+    "name": "Twitter-Scraper",
+    "description": "An example twitter scraper for educational purposes",
+    "version": "1.0.0",
+    "author": "Jimmy Aupperlee <jimmy@codeprogressive.com>",
+    "contributors": [
+        {
+            "name": "Jimmy Aupperlee",
+            "email": "jimmy@codeprogressive.com"
+        }
+    ],
+    "dependencies": {
+        "twitter": "0.2.x",
+        "instagram" : "*",
+        "request" : "*",
+        "colors" : "*",
+        "moment" : "*"
+    },
+    "private": true
+}
