@@ -1,0 +1,17 @@
+{
+    "name": "Simple-Chat-Client",
+    "description": "An example chat client for educational purposes",
+    "version": "1.0.0",
+    "author": "Jimmy Aupperlee <jimmy@codeprogressive.com>",
+    "contributors": [
+        {
+            "name": "Jimmy Aupperlee",
+            "email": "jimmy@codeprogressive.com"
+        }
+    ],
+    "dependencies": {
+        "express": "3.x",
+        "socket.io" : "*"
+    },
+    "private": true
+}
