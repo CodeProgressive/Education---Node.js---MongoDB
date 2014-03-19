@@ -1,0 +1,15 @@
+@import "bootstrap.css";
+@import "bootstrap-theme.css";
+
+#message-container {
+    list-style: none;
+    max-height: 400px;
+    overflow: auto;
+}
+#message-container > li {
+    font-weight: bold;
+    padding: 5px 0px;
+}
+#message-container > li:not(:last-child) {
+    border-bottom: 1px #fff solid;
+}

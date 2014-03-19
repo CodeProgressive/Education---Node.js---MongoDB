@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <h2>Awesome stuff?!</h2>
+                    <h4>Has anyone found any super cool stuff?</a></h4>
+                </section>
+                <section>
+                    <section>
+                        <h2>Repetition : Default HTTP</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Require the http node module
+var http = require('http'),
+    port = 8080;
+
+// http.createServer is asynchronous so we need a callback
+http.createServer(function (req, res) {
+
+  // Make sure you send the right header and content
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+
+}).listen(port);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Express Module</h2>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Require the module express and initialize it into the app variable
+var express = require('express'),
+    app = express();
+
+// Specify the routes
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+
+// Start the server
+app.listen(8080);
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Your very own API with Express!</h2>
+                    <h4>Let's see how that works.</h4>
+                </section>
+                <section>
+                    <section>
+                        <h2>Let the real fun start.</h2>
+                        <h5>No more boring applications, thanks to sockets!</h5>
+                    </section>
+                    <section>
+                        <h3>But wait.. What is a socket exactly?</h3>
+                        <ul>
+                            <li>HTML with 'Upgrade' parameter,</li>
+                            <li>"Handshake" to validate identity,</li>
+                            <li>Full duplex</li>
+                            <li>Constant packet stream of 4-16 bytes.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Handshake?</h3>
+                        <ul>
+                            <li>The client sends a key and version,</li>
+                            <li>The server bas64 encodes and SHA1 encrypts this key,</li>
+                            <li>Sends this back as an accept key,</li>
+                            <li>The Full duplex stream has been opened!</li>
+                        </ul>
+                    </section>
+                </section>
+                <section data-background="#c0392b" data-transition="zoom">
+                    <h2 style="color: #fff;">Ooh no! That shit is complicated!!</h2>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">Don't you worry! It's real simple.</h2>
+                </section>
+                <section>
+                    <section>
+                        <h2>How to use sockets?</h2>
+                        <h3>We use the <u>Socket.io</u> package.</h3>
+                        <h4>Server side sockets.</h4>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Require the module socket.io and initiate it on port 80
+var io = require('socket.io').listen(80);
+
+// Event handler for when someone connects to the socket
+io.sockets.on('connection', function (socket) {
+
+    // Return an event name and object
+    socket.emit('news', { hello: 'world' });
+
+    // Other event listener
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+
+});
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h4>Client side sockets.</h4>
+                        <pre><code data-trim class="html" contenteditable>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Initiate the socket connection
+    var socket = io.connect('http://localhost');
+
+    // Await returned news
+    socket.on('news', function (data) {
+        // Console log the returned data
+        console.log(data);
+
+        // Other event listener
+        socket.emit('my other event', { my: 'data' });
+    });
+</script>
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Assignment: Let's put it to good use!</h2>
+                        <h4>Let's build a simple real-time chat client:</h4>
+                        <ul>
+                            <li>Build a chat server for the client we provide,</li>
+                            <li>Save the chat messages in a variable,</li>
+                            <li>Finish the client socket connection,</li>
+                            <li>Use the 'addMessage(string)' function for adding messages.</li>
+                        </ul>
+                        <h5> </h5>
+                        <h5><a href="http://goo.gl/VSa4Ty" target="_blank">http://goo.gl/VSa4Ty</a></h5>
+                    </section>
+                    <section>
+                        <h2>That stuff was easy!</h2>
+                        <h5>This is the server</h5>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Create public variables for later use
+
+// Public variable containing connections
+self.sockets = [];
+// Public variable containing messages
+self.messages = [];
+
+// ...
+
+// Start listening for connections
+io.sockets.on('connection', function (socket) {
+
+    // Push the socket into an array
+    self.sockets.push(socket);
+
+    // Send the messages that are already in the array
+    socket.emit('messages', {content : self.messages});
+
+    // On every message send it to every socket
+    socket.on('message', function(data) {
+
+        // Push the message into an array
+        self.messages.push(data.content);
+
+        self.sockets.forEach(function(value) {
+            value.emit('message', {content : data.content})
+        });
+    });
+
+    // Remove the socket from the array when disconnected
+    socket.on('disconnect', function(){
+        // Find the location of the socket in the array
+        var index = self.sockets.indexOf(socket);
+        // When found
+        if (index > -1) {
+            // Remove it and reorder the array
+            self.sockets.splice(index, 1);
+        }
+    });
+});
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h5>And here is the client</h5>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Emit the message to the socket!
+if(message.replace(/\s/g,'').length > 0) {
+    socket.emit("message", {content : message});
+    input.val("");
+}
+
+// ...
+
+// Use the addMessage function to add messages when the socket server gives messages to the client
+// The array containing all previous messages
+socket.on('messages', function(data){
+    var content = data.content;
+    for(var x in content) {
+        addMessage(content[x]);
+    }
+});
+
+// A new message!
+socket.on('message', function (data) {
+    var content = data.content;
+    addMessage(content);
+});
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>The last assignment</h2>
+                        <h5>Realtime coding</h5>
+
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Use a socket connection in an empty HTML page,</li>
+                            <li>Check an entire folder for changes,</li>
+                            <li>When there are changes in a CSS file; Update this CSS file,</li>
+                            <li>If the changed file is javascript, reload the entire page.</li>
+                        </ul>
+                        <div class="fragment" style="margin-top: 20px;">
+                            <h5>For the diehards</h5>
+                            <ul style="font-size: 0.7em; line-height: 1em;">
+                                <li>Wrap it in an express server,</li>
+                                <li>When the HTML changes, push only the changed HTML,</li>
+                                <li>Automatically start the client-side socket.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <h2>Finally, let's get ready for next week.</h2>
+                    <h4>Live vagrant installation and setup.</h4>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>MongoDB - Introduction, what’s normal? don’t normalize... create apps!</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Simple socket.io chat client [Node.js & MongoDB Workshop 04]</title>
+
+    <!-- Mobile preferences -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/base.css">
+
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+        // When the document has finished loading
+        // Use window.load when the function requires images to be loaded
+        $(document).ready(function(){
+
+            // We make the connection to the socket
+            var socket = io.connect('http://localhost');
+
+            // The function used to insert the message
+            var addMessage = function(content) {
+                var container = $("#message-container");
+                container.append("<li>"+content+"</li>");
+                // Scroll to the end automatically
+                container.scrollTop(container[0].scrollHeight);
+            }
+
+            // When submitting the forum (through the enter key or the button)
+            $("#message-form").submit(function(event){
+
+                // We will be using it multiple times so save it
+                var input = $("input#message"),
+                    message = input.val();
+
+                // make sure the page doesn't reload
+                event.preventDefault();
+
+                if(message.replace(/\s/g,'').length > 0) {
+                    socket.emit("message", {content : message});
+                    input.val("");
+                }
+
+                // make very very sure the page doesn't reload
+                return false;
+            });
+
+            // The array containing all previous messages
+            socket.on('messages', function(data){
+                var content = data.content;
+                for(var x in content) {
+                    addMessage(content[x]);
+                }
+            });
+
+            // A new message!
+            socket.on('message', function (data) {
+                var content = data.content;
+                addMessage(content);
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h3 class="text-muted">Simple socket.io chat client</h3>
+        </div>
+
+        <div class="jumbotron">
+            <h1>Anonymous chatroom</h1>
+            <ul class="well" id="message-container">
+                <li>Welcome to the chatroom!</li>
+            </ul>
+        </div>
+
+        <form id="message-form" class="form-inline pull-right" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="message">Email address</label>
+                <input type="message" class="form-control" id="message" placeholder="Enter message">
+            </div>
+            <button type="submit" class="btn btn-success">Send message</button>
+        </form>
+
+    </div>
+</body>
+</html>
