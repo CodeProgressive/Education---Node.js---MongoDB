@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <section>
+                        <h2>Repetition : Websocket theory</h2>
+                        <ul>
+                            <li>HTML with 'Upgrade' parameter,</li>
+                            <li>"Handshake" to validate identity,</li>
+                            <li>Full duplex</li>
+                            <li>Constant packet stream of 4-16 bytes.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition : Handshake theory</h2>
+                        <ul>
+                            <li>The client sends a key and version,</li>
+                            <li>The server bas64 encodes and SHA1 encrypts this key,</li>
+                            <li>Sends this back as an accept key,</li>
+                            <li>The Full duplex stream has been opened!</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition : Socket.io practise</h2>
+                        <h4>Server side sockets.</h4>
+                        <pre><code data-trim class="javascript" contenteditable>
+// Require the module socket.io and initiate it on port 80
+var io = require('socket.io').listen(80);
+
+// Event handler for when someone connects to the socket
+io.sockets.on('connection', function (socket) {
+
+    // Return an event name and object
+    socket.emit('news', { hello: 'world' });
+
+    // Other event listener
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+
+});
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition : Socket.io practise</h2>
+                        <h4>Client side sockets.</h4>
+                        <pre><code data-trim class="html" contenteditable>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Initiate the socket connection
+    var socket = io.connect('http://localhost');
+
+    // Await returned news
+    socket.on('news', function (data) {
+        // Console log the returned data
+        console.log(data);
+
+        // Other event listener
+        socket.emit('my other event', { my: 'data' });
+    });
+</script>
+                        </code></pre>
+                    </section>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">And now, get ready for...</h2>
+                </section>
+                <section data-transition="zoom">
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb.png"/>
+                </section>
+                <section>
+                    <h2>Why should you sit here ...</h2>
+                    <h2 class="fragment">and listen to this crap?</h2>
+                    <h4 class="fragment">Is it dark propaganda?</h4>
+                    <h5 class="fragment">Are the russians behind this evil technology?</h5>
+                </section>
+                <section>
+                    <h2>Because</h2>
+                    <h3>relational databases are ancient</h3>
+                    <h5 class="fragment">and you are probably not...</h5>
+                </section>
+                <section>
+                    <section>
+                        <h2>The philosophy</h2>
+                        <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__scaling.png"/>
+                    </section>
+                    <section>
+                        <h2>How?</h2>
+                        <h4>By leaving out unnecessary features</h4>
+                        <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__features.png"/>
+                    </section>
+                </section>
+                <section>
+                    <h2>So what is it?</h2>
+                    <h5>A document oriented database</h5>
+                    <ul>
+                        <li>Document Database
+                            <br><small>Documents (objects) map nicely to programming language data types.</small>
+                            <br><small>Embedded documents and arrays reduce need for joins.</small>
+                            <br><small>Dynamic schema makes polymorphism easier.</small>
+                        </li>
+                        <li>High Performance
+                            <br><small>Embedding makes reads and writes fast.</small>
+                            <br><small>Indexes can include keys from embedded documents and arrays.</small>
+                            <br><small>Optional streaming writes (no acknowledgments).</small>
+                        </li>
+                        <li>High Availability
+                            <br><small>Replicated servers with automatic master failover.</small>
+                        </li>
+                        <li>Easy Scalability
+                            <br><small>Automatic sharding distributes collection data across machines.</small>
+                            <br><small>Eventually-consistent reads can be distributed over replicated servers.</small>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>In Mongo we call:</h2>
+                    <ul>
+                        <li><strong>tables; collections,</strong></li>
+                        <li>select; find,</li>
+                        <li>create; insert,</li>
+                        <li>update; update,</li>
+                        <li>delete; remove.</li>
+                    </ul>
+                    <h5></h5>
+                    <h5>More about queries next week...</h5>
+                </section>
+                <section>
+                    <section>
+                        <h2>Application first</h2>
+                        <ul>
+                            <li>Non-relational database<br><small>Store the data where it should be</small></li>
+                            <li>Schema-less design<br><small>Polymorphism rules!</small></li>
+                            <li>Document oriented<br><small>Just throw the object in there</small></li>
+                            <li>No joins or complications<br><small>Stop overthinking crap!</small></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>The difference?</h3>
+                        <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__joins-vs-nesting.png"/>
+                    </section>
+                </section>
+                <section>
+                    <h2>Assignment</h2>
+                    <h5>Sort of...</h5>
+                    <ul>
+                        <li>Install MongoDB or Start our Vagrant box</li>
+                        <li>Use the command: <u>mongo --version</u>, to print the current version</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h2>Everything is JSON</h2>
+                        <ul>
+                            <li>It's a document</li>
+                            <li>with Key : Value pairs</li>
+                            <li>Keys are always in String format</li>
+                        </ul>
+                            <pre><code data-trim class="json" contenteditable>
+{
+    "name" : "Jimmy",
+    "age" : 24,
+    "presenting" : {
+        "mongodb" : true,
+    }
+}
+                            </code></pre>
+                    </section>
+                    <section>
+                        <h2>Values can either be:</h2>
+                        <ul>
+                            <li>Number</li>
+                            <li>String</li>
+                            <li>Boolean</li>
+                            <li>Array</li>
+                            <li>Object (document)</li>
+                            <li>null</li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h2>Under the hood</h2>
+                    <h3>Everything is BSON</h3>
+                    <h4>Because...</h4>
+                    <ul>
+                        <li>BSON is fast scannable</li>
+                        <li>JSON is just strings (every character needs examination)</li>
+                        <li>BOSN is a continuous length of values</li>
+                    </ul>
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__bson.png"/>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">Good to know,</h2>
+                    <h5 style="color: #fff;">But not something you will be needing on a daily bases.</h5>
+                </section>
+                <section>
+                    <section>
+                        <h2>The Mongo Shell</h2>
+                        <h5>Start it by commanding:</h5>
+                            <pre><code data-trim class="bash" contenteditable>
+$ mongo "[host]/[database]"
+                            </code></pre>
+                    </section>
+                    <section>
+                        <h2>The Mongo Shell</h2>
+                        <h5>Useful commands</h5>
+                            <pre><code data-trim class="bash" contenteditable>
+# Access a database
+> use "[database name]"
+
+# Show databases
+> show dbs
+
+# Show collections
+> show collections
+
+# Help with everything
+> help
+                            </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Assignment : Import data and verify</h2>
+                    <ul>
+                        <li>Download products.json from our github: <a href="http://goo.gl/Brghdg">http://goo.gl/Brghdg</a></li>
+                        <li>Use mongoimport to import the json to the <u>products</u> collection in database pcat</li>
+                        <pre><code data-trim class="bash" contenteditable>
+$ mongoimport --db "[database]" --collection "[collection]" --file "[file]"
+                        </code></pre>
+                        <li>Then verify if everything went a-okay!</li>
+                        <pre><code data-trim class="bash" contenteditable>
+$ mongo
+> use pcat
+> db.products.count() # 11
+> db.products.find()  # unreadable mess
+> db.products.find().pretty()
+                        </code></pre>
+                    </ul>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>MongoDB - Hardcore shell action, getting your CRUD on</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
