@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+        <style>
+            .row-even:not(:last-child),
+            .row-odd:not(:last-child) {
+                border-bottom: 1px #8b743d solid;
+            }
+        </style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb.png"/>
+                </section>
+                <section>
+                    <section>
+                        <h2>Repetition: What is MongoDB?</h2>
+                        <h5>A document oriented database</h5>
+                        <ul>
+                            <li>Document Database
+                                <br><small>Documents (objects) map nicely to programming language data types.</small>
+                                <br><small>Embedded documents and arrays reduce need for joins.</small>
+                                <br><small>Dynamic schema makes polymorphism easier.</small>
+                            </li>
+                            <li>High Performance
+                                <br><small>Embedding makes reads and writes fast.</small>
+                                <br><small>Indexes can include keys from embedded documents and arrays.</small>
+                                <br><small>Optional streaming writes (no acknowledgments).</small>
+                            </li>
+                            <li>High Availability
+                                <br><small>Replicated servers with automatic master failover.</small>
+                            </li>
+                            <li>Easy Scalability
+                                <br><small>Automatic sharding distributes collection data across machines.</small>
+                                <br><small>Eventually-consistent reads can be distributed over replicated servers.</small>
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition: Change your approach</h2>
+                        <h3>Application first development!</h3>
+                        <ul>
+                            <li>Non-relational database<br><small>Store the data where it should be</small></li>
+                            <li>Schema-less design<br><small>Polymorphism rules!</small></li>
+                            <li>Document oriented<br><small>Just throw the object in there</small></li>
+                            <li>No joins or complications<br><small>Stop overthinking crap!</small></li>
+                        </ul>
+                        <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__joins-vs-nesting.png"/>
+                    </section>
+                </section>
+                <section>
+                    <h2>Repetition: What is MongoDB?</h2>
+                    <h3>Everything is JSON</h3>
+                    <h3>Under the hood it's BSON</h3>
+                    <ul>
+                        <li>BSON is fast scannable</li>
+                        <li>JSON is just strings (every character needs examination)</li>
+                        <li>BOSN is a continuous length of values</li>
+                    </ul>
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb-for-dbas__bson.png"/>
+                </section>
+                <section>
+                    <section>
+                        <h2>Repetition: The Mongo Shell</h2>
+                            <pre><code data-trim class="bash" contenteditable>
+# Start the mongo shell
+$ mongo "[host]/[database]"
+
+# Access a database
+> use "[database name]"
+
+# Show databases
+> show dbs
+
+# Show collections
+> show collections
+
+# Help with everything
+> help
+                            </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition: Mongo Import</h2>
+                        <h3>Import: JSON, CSV, or TSV</h3>
+                        <pre><code data-trim class="bash" contenteditable>
+$ mongoimport --db "[database]" --collection "[collection]" --file "[file]"
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>SQL to Mongo</h2>
+                    <table style="font-size: .6em; padding: 0em 5em;" border="1">
+                        <colgroup>
+                            <col width="50%">
+                            <col width="50%">
+                        </colgroup>
+                        <thead valign="bottom">
+                        <tr class="row-odd"><th class="head">SQL Terms/Concepts</th>
+                            <th class="head">MongoDB Terms/Concepts</th>
+                        </tr>
+                        </thead>
+                        <tbody valign="top">
+                        <tr class="row-odd"><td>table</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/glossary/glossary/#term-collection"><em class="xref std std-term">collection</em></a></td>
+                        </tr>
+                        <tr class="row-even"><td>row</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/glossary/glossary/#term-document"><em class="xref std std-term">document</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>column</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/glossary/glossary/#term-field"><em class="xref std std-term">field</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>create</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/method/db.collection.insert/#db.collection.insert"><em class="xref std std-term">insert</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>update</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update"><em class="xref std std-term">update</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>select</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/method/db.collection.find/#db.collection.find"><em class="xref std std-term">find</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>delete</td>
+                            <td><a class="reference internal" href="http://docs.mongodb.org/manual/reference/method/db.collection.remove/#db.collection.remove"><em class="xref std std-term">remove</em></a></td>
+                        </tr>
+                        <tr class="row-odd"><td>table joins</td>
+                            <td>embedded documents and linking</td>
+                        </tr>
+                        <tr class="row-even">
+                            <td>
+                                <p class="first">primary key</p>
+                            </td>
+                            <td>
+                                <p class="last">In MongoDB, the primary key is automatically set to the <a class="reference internal" href="http://docs.mongodb.org/manual/reference/glossary/glossary/#term-id"><em class="xref std std-term">_id</em></a> field.</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="http://goo.gl/6BW3XX" target="_blank">http://goo.gl/6BW3XX</a>
+                </section>
+                <section>
+                    <h2>That's the _id</h2>
+                    <h4>The primary key that's always there!</h4>
+                    <ul>
+                        <li>Every document always has one, no exceptions!</li>
+                        <li>You can either choose one, or let it be auto generated</li>
+                        <li>Unique 12-byte BSON object</li>
+                        <li>Auto : Timestamp + machine ID + process ID + Counter.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Now let's get back</h2>
+                    <h3>To that beautiful shell!</h3>
+                    <h4>Because you are going to need it sooner or later...</h4>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">Everything is Javascript</h2>
+                </section>
+                <section>
+                    <h2>Sweet V8 action baby!</h2>
+                    <h4>So you can literally write javascript code inside the shell!</h4>
+                    <h5>Every possible mongo shell command:</h5>
+                    <a href="http://goo.gl/hkNmgi" target="_blank">http://goo.gl/hkNmgi</a>
+                </section>
+                <section>
+                    <section>
+                        <h2>Let's start with find()</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.find("[criteria]", "[projection]")
+
+# example
+> db.classroom.find({ name : "jimmy" }, { _id : 0 })
+                        </code></pre>
+                        <ul>
+                            <li>Both optional parameters are objects</li>
+                            <li>Specifically exclude _id in the projection parameter</li>
+                            <li>Returns a cursor</li>
+                            <li>Shell: Auto max 20 results, "it"</li>
+                        </ul>
+                        <a href="http://goo.gl/IObQVK" target="_blank">http://goo.gl/IObQVK</a>
+                    </section>
+                    <section>
+                        <h2>Make it pretty</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.find("[criteria]", "[projection]").pretty()
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Just one please...</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.findOne("[criteria]", "[projection]")
+
+# example
+> db.classroom.findOne({ name : "jimmy" }, { _id : 0 })
+                        </code></pre>
+                        <ul>
+                            <li>Returns the first occurance</li>
+                            <li>Not a cursor but a document</li>
+                            <li>Already pretty</li>
+                        </ul>
+                        <br>
+                        <a href="http://goo.gl/asq2QO" target="_blank">http://goo.gl/asq2QO</a>
+                    </section>
+                </section>
+                <section>
+                    <h2>Query and projection operators</h2>
+                    <h4>Just a few examples:</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Get a range
+> db.collection.find({ qty: { $gt: 20, $lte: 50 } })
+
+# Get documents where field is something from an array
+> db.collection.find({ name: { $in: ["jimmy", "ricardo"] } })
+
+# Where the field exists and not equal to...
+> db.inventory.find({ qty: { $exists: true, $nin: [ 5, 15 ] } })
+
+# Where the field equals ... or ... or ...
+> db.inventory.find({ $or: [ { qty: { $lt: 20 } }, { sale: true } ] })
+                        </code></pre>
+                    <h5>The link below will show all of 'em</h5>
+                    <a href="http://goo.gl/SNMp5c" target="_blank">http://goo.gl/SNMp5c</a>
+                </section>
+                <section>
+                    <h2>Cursor commands</h2>
+                    <h4>Chained awesomeness</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Sort the returned documents
+> db.collection.find().sort({ "[fieldname]" : "[1 or -1]" })
+
+# Limit amount of returned documents
+> db.collection.find().limit("[amount]")
+
+# The offset amount, skip the first [amount]
+> db.collection.find().skip("[amount]")
+
+# Count the returned amount of documents
+> db.collection.find().count()
+
+# Example: Go nuts...
+> db.collection.find().sort({ "name" : 1 }).limit(5).skip(2)
+                        </code></pre>
+                    <a href="http://goo.gl/Qy7LXv" target="_blank">http://goo.gl/Qy7LXv</a>
+                </section>
+                <section>
+                    <section>
+                        <h2>Assignment : Find exercises</h2>
+                        <h4>It is required to have imported products.json from our github: <a href="http://goo.gl/Brghdg">http://goo.gl/Brghdg</a></h4>
+                        <h5>Write queries for the following problems</h5>
+                        <ul>
+                            <li>Get all the products where brand equals the string “ACME”</li>
+                            <li>Get all products with a price higher than 12</li>
+                            <li>Get all accessory names for the AC7 phone (no other fields)</li>
+                            <li>Get all documents with a warranty_years field</li>
+                            <li>Sort the last exercise by name and limit it to 3 results</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition : Last week...</h2>
+                        <ul>
+                            <li>Download products.json from our github: <a href="http://goo.gl/Brghdg">http://goo.gl/Brghdg</a></li>
+                            <li>Use mongoimport to import the json to the <u>products</u> collection in database pcat</li>
+                        <pre><code data-trim class="bash" contenteditable>
+                            $ mongoimport --db "[database]" --collection "[collection]" --file "[file]"
+                        </code></pre>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h2>Insert documents</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.insert([document])
+
+# example
+> db.products.insert( { item: "card", qty: 15 } )
+                        </code></pre>
+                        <ul>
+                            <li>An entire JSON object can be inserted</li>
+                            <li>Even an array containing multiple JSON objects</li>
+                            <li>Auto generate or design your own _id field</li>
+                        </ul>
+                        <a href="http://goo.gl/T7S74D" target="_blank">http://goo.gl/T7S74D</a>
+                </section>
+                <section>
+                    <h2>Remove documents</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# remove all (be careful!)
+> db.collection.remove()
+
+# remove specified
+> db.collection.remove("[query]", "[justOne]")
+
+# example
+> db.products.remove( { qty: { $gt: 20 } }, true )
+                        </code></pre>
+                        <ul>
+                            <li>All query operators are allowed</li>
+                            <li>justOne is a boolean which defaults to false</li>
+                        </ul>
+                        <a href="http://goo.gl/qIrVIh" target="_blank">http://goo.gl/qIrVIh</a>
+                </section>
+                <section>
+                    <section>
+                        <h2>Update documents</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.update("[query]", "[update]", "[options]")
+
+# example
+> db.classroom.update( { name: "jimmy" }, { name: "ricardo" } } )
+                        </code></pre>
+                        <ul>
+                            <li>All query operators are allowed</li>
+                            <li>[update] will completely overwrite the documents queried</li>
+                            <li>The update parameter has many new operators</li>
+                            <li>[options] is optional</li>
+                        </ul>
+                        <a href="http://goo.gl/Ihb0K7" target="_blank">http://goo.gl/Ihb0K7</a>
+                    </section>
+                    <section>
+                        <h2>Update operators</h2>
+                        <h4>Just a few examples:</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Only update one field value inside the document
+> db.classroom.update( { name: "jimmy" }, { $set: { age : 24 } } )
+
+# Increase a value in a document
+> db.classroom.update( { name: "jimmy" }, { $inc: { age : 1 } } )
+
+# Push a value to an array in a document
+> db.classroom.update( { name: "jimmy" }, { $push: { presence_dates : "27 Maart 2014" } } )
+                        </code></pre>
+                        <h5>The link below will show all of 'em</h5>
+                        <a href="http://goo.gl/8QN479" target="_blank">http://goo.gl/8QN479</a>
+                    </section>
+                    <section>
+                        <h2>Update options</h2>
+                        <h4>Upsert: Update or insert if not exists</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+> db.classroom.update( { name: "jimmy" }, { $set: { age : 24 } }, { upsert : true } )
+                        </code></pre>
+                        <h4>Multi: Update multiple documents</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+> db.classroom.update( { name: "jimmy" }, { $set: { age : 24 } }, { multi : true } )
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Assignment : CUD exercises</h2>
+                        <h5><small>We already did the R in CRUD before, remember?</small></h5>
+                        <h4>Use the products collection from the previous exercises</h4>
+                        <h5>Complete each exercise with only one command / query !!!</h5>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Insert the new AC4 phone; price 250 and it's not available yet.</li>
+                            <li>Insert two new cases for the AC4 phone (use the current AC3 cases as a template)</li>
+                            <li>Remove the old AC3 phone and all accessories only supporting this model.</li>
+                            <li>Update all documents with type; service and change the type to subscription</li>
+                            <li>Add a field called <strong>subscription_allowed</strong> with a value <strong>true</strong> to all phones</li>
+                            <li>Update all AC3 accessories to support the AC4 model too</li>
+                            <li>Increase all data limit over rate costs by 1 where the monthly price is higher than 50</li>
+                        </ul>
+                    </section>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>MongoDB - Index, aggregate and streamline your database</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
