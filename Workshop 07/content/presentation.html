@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+        <style>
+            .row-even:not(:last-child),
+            .row-odd:not(:last-child) {
+                border-bottom: 1px #8b743d solid;
+            }
+        </style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <img style="border: none !important; box-shadow: none !important;" src="assets/img/mongodb.png"/>
+                </section>
+                <section>
+                    <section>
+                        <h2>Repetition: Find queries?</h2>
+                        <h5>Finding your way through the database</h5>
+                        <pre><code data-trim class="bash" contenteditable>
+# Get a range
+> db.collection.find({ qty: { $gt: 20, $lte: 50 } })
+
+# Get documents where field is something from an array
+> db.collection.find({ name: { $in: ["jimmy", "ricardo"] } })
+
+# Where the field exists and not equal to...
+> db.inventory.find({ qty: { $exists: true, $nin: [ 5, 15 ] } })
+
+# Where the field equals ... or ... or ...
+> db.inventory.find({ $or: [ { qty: { $lt: 20 } }, { sale: true } ] })
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition: Stack your commands.</h2>
+                        <h3>Continuing your search for greatness.</h3>
+                        <pre><code data-trim class="bash" contenteditable>
+# Sort the returned documents
+> db.collection.find().sort({ "[fieldname]" : "[1 or -1]" })
+
+# Limit amount of returned documents
+> db.collection.find().limit("[amount]")
+
+# The offset amount, skip the first [amount]
+> db.collection.find().skip("[amount]")
+
+# Count the returned amount of documents
+> db.collection.find().count()
+
+# Example: Go nuts...
+> db.collection.find().sort({ "name" : 1 }).limit(5).skip(2)
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition: Creating documents.</h2>
+                        <h3>Everything is JSON</h3>
+                        <pre><code data-trim class="bash" contenteditable>
+# usage
+> db.collection.insert([document])
+
+# example
+> db.products.insert( { item: "card", qty: 15 } )
+                            </code></pre>
+                            <ul>
+                                <li>An entire JSON object can be inserted</li>
+                                <li>Even an array containing multiple JSON objects</li>
+                                <li>Auto generate or design your own _id field</li>
+                            </ul>
+                            <a href="http://goo.gl/T7S74D" target="_blank">http://goo.gl/T7S74D</a>
+                    </section>
+                    <section>
+                        <h2>Repetition: Erasing the evidence.</h2>
+                            <pre><code data-trim class="bash" contenteditable>
+# remove all (be careful!)
+> db.collection.remove()
+
+# remove specified
+> db.collection.remove("[query]", "[justOne]")
+
+# example
+> db.products.remove( { qty: { $gt: 20 } }, true )
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition: Updating everything.</h2>
+                        <h3>Correcting your mistakes from before.</h3>
+                        <pre><code data-trim class="bash" contenteditable>
+# Only update one field value inside the document
+> db.classroom.update( { name: "jimmy" }, { $set: { age : 24 } } )
+
+# Increase a value in a document
+> db.classroom.update( { name: "jimmy" }, { $inc: { age : 1 } } )
+
+# Push a value to an array in a document
+> db.classroom.update( { name: "jimmy" }, { $push: { presence_dates : "27 Maart 2014" } } )
+                        </code></pre>
+                        <h5>All update commands listed in the link below.</h5>
+                        <a href="http://goo.gl/8QN479" target="_blank">http://goo.gl/8QN479</a>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Explanation of explain</h2>
+                        <pre><code data-trim class="bash" contenteditable>
+# Get details of you last find query
+> db.collection.find().explain()
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Results of 'explain'</h2>
+                        <pre><code data-trim class="json" contenteditable>
+{
+  "cursor" : "Cursor Type and Index",
+  "isMultiKey" : boolean,
+  "n" : num,
+  "nscannedObjects" : num,
+  "nscanned" : num,
+  "nscannedObjectsAllPlans" : num,
+  "nscannedAllPlans" : num,
+  "scanAndOrder" : boolean,
+  "indexOnly" : boolean,
+  "nYields" : num,
+  "nChunkSkips" : num,
+  "millis" : num,
+  "indexBounds" : { index bounds },
+  "allPlans" : [
+                 { "cursor" : "Cursor Type and Index",
+                   "n" : num,
+                   "nscannedObjects" : num,
+                   "nscanned" : num,
+                   "indexBounds" : { index bounds }
+                 },
+                  ...
+               ],
+  "oldPlan" : {
+                "cursor" : "Cursor Type and Index",
+                "indexBounds" : { index bounds }
+              }
+  "server" : "host:port",
+}
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Ooh no! My queries are as slow as SQL!</h2>
+                    <h4>That tends to happen</h4>
+                    <pre><code data-trim class="json" contenteditable>
+{
+  "cursor": "BtreeCursor a_1_b_1",
+  "isMultiKey": false,
+  "n": 2,
+  "nscannedObjects": 223,
+  "nscanned": 223,
+  "nscannedObjectsAllPlans": 6,
+  "nscannedAllPlans": 6,
+  "scanAndOrder": false,
+  "indexOnly": false,
+  "nYields": 0,
+  "nChunkSkips": 0,
+  "millis": 15820,
+...
+}
+                        </code></pre>
+                </section>
+                <section data-background="#2980b9" data-transition="zoom">
+                    <h2 style="color: #fff;">I didn't sign up for this?!</h2>
+                </section>
+                <section data-background="#27ae60" data-transition="zoom">
+                    <h2 style="color: #fff;">Luckily, we have a solution!</h2>
+                    <h4 style="color: #fff;">As always..</h4>
+                </section>
+                <section>
+                    <h2>What is indexing?</h2>
+                    <h4>Indexes provide high performance read operations for frequently used queries.</h4>
+                </section>
+                <section>
+                    <section>
+                        <h2>So many indexes!</h2>
+                        <h4>Different type of indexes:</h4>
+                        <ul>
+                            <li>Single field</li>
+                            <li>Coumpound</li>
+                            <li>Multikey</li>
+                            <li>Geospatial</li>
+                            <li>Text</li>
+                            <li>Hashed</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Indexing options</h2>
+                        <h4>Every index type has these options</h4>
+                        <ul>
+                            <li>Unique: 'boolean'</li>
+                            <li>Sparse: 'boolean'</li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Single field indexing</h2>
+                        <h4>_id is indexed by default.</h4>
+                        <pre><code data-trim class="json" contenteditable>
+{
+    "_id" : ObjectId(...),
+    "name" : "Alice"
+    "age" : 27
+}
+                        </code></pre>
+                        <pre><code data-trim class="bash" contenteditable>
+# Create an index on the name field
+> db.collection.ensureIndex( { "name" : 1 } )
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Making fields unique</h2>
+                        <h4>Ensure that the 'name' field contains unique data</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Create an index on the name field and make it unique
+> db.collection.ensureIndex( { "name" : 1 }, { unique: true } )
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Sparsing? WTF?</h2>
+                        <h4>Only index documents that actually contain the 'name' field</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Create an index on the name field and exclude documents not containing the 'name' field
+> db.collection.ensureIndex( { "name" : 1 }, { sparse: true } )
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>Compound indexes</h2>
+                    <h4>Don't use misuse these epics!</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Combine multiple fields in one index
+> db.collection.ensureIndex( { item: 1, category: 1, price: 1 } )
+                        </code></pre>
+                    <h5>Ofcourse this also supports sparse and unique</h5>
+                </section>
+                <section>
+                    <h2>System profiles</h2>
+                    <h4>Getting detailed information, save it for later analysing</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# This commands saves all queries taking more than 100ms
+> db.setProfilingLevel(1)
+                        </code></pre>
+                    <h5>The above command works on the entire database, not just a collection.</h5>
+                </section>
+                <section>
+                    <h2>Assignment : Index the system profile</h2>
+                    <h4>Download and import our big JSON file: <a href="http://goo.gl/PbNBNX">http://goo.gl/PbNBNX</a></h4>
+                    <ul>
+                        <li>Query the profile data, looking for all queries to the students collection in the database school2, sorted in order of decreasing latency. </li>
+                        <li>Get the latency of the longest running operation to the collection, in milliseconds.</li>
+                        <li>Run an explain on your previous query. The latency should be larger than 0 milliseconds.</li>
+                        <li>Create two indexes which make the latency 0 milliseconds.</li>
+                        <li>Run an explain again to check that both indexes are being used.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Aggregation? Dafuq?</h2>
+                    <h4>Advanced searching the database for 'übermenschen'</h4>
+                    <ul style="margin-bottom: 20px;">
+                        <li>Grouping documents for searches</li>
+                        <li>Grouping documents by fields</li>
+                        <li>Deciding what you will search for</li>
+                        <li>Many group operators</li>
+                    </ul>
+                    <h5><a href="http://goo.gl/Q3Fm7w" target="_blank">http://goo.gl/Q3Fm7w</a></h5>
+                </section>
+                <section>
+                    <section>
+                        <h2>Pipeline aggregation operators</h2>
+                        <h4>Project</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Use the $project to create and populate new sub-documents
+> db.collection.aggregate(
+    { $project : {
+        title : 1 ,
+        stats : {
+            pv : "$pageViews",
+            foo : "$other.foo",
+            dpv : { $add:["$pageViews", 10] }
+        }
+    }}
+);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Pipeline aggregation operators</h2>
+                        <h4>Unwind</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# This aggregation $project selects (inclusively) the author, title, and tags fields
+> db.collection.aggregate(
+    { $project : {
+        author : 1 ,
+        title : 1 ,
+        tags : 1
+    }},
+    { $unwind : "$tags" }
+);
+                        </code></pre>
+                        <pre><code data-trim class="json" contenteditable>
+{
+     "result" : [
+         {
+            "_id" : ObjectId("4e6e4ef557b77501a49233f6"),
+            "title" : "this is my title",
+            "author" : "bob",
+            "tags" : "fun"
+         },
+         {
+            "_id" : ObjectId("4e6e4ef557b77501a49233f6"),
+            "title" : "this is my title",
+            "author" : "bob",
+            "tags" : "good"
+         },
+         {
+            "_id" : ObjectId("4e6e4ef557b77501a49233f6"),
+            "title" : "this is my title",
+            "author" : "bob",
+            "tags" : "fun"
+         }
+     ],
+     "OK" : 1
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Pipeline aggregation operators</h2>
+                        <h4>Group</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# This aggregation pipeline groups by the author field and computes two fields
+> db.collection.aggregate(
+    { $group : {
+        _id : "$author",
+        docsPerAuthor : { $sum : 1 },
+        viewsPerAuthor : { $sum : "$pageViews" }
+    }}
+);
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Pipeline aggregation operators</h2>
+                        <h4>Match</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# $match selects the documents where the score is greater than 70 and less than or equal to 90
+> db.articles.aggregate( [
+    { $match : { score : { $gt : 70, $lte : 90 } } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+] );
+                        </code></pre>
+                        <pre><code data-trim class="json" contenteditable>
+{
+    "result" : [
+            {
+                 "_id" : null,
+                 "count" : 3
+            }
+        ],
+    "ok" : 1
+}
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Group aggregation operators</h2>
+                        <ul style="margin-bottom: 20px;">
+                            <li>$addToSet</li>
+                            <li>$first</li>
+                            <li>$last</li>
+                            <li>$max</li>
+                            <li>$min</li>
+                            <li>$avg</li>
+                            <li>$push</li>
+                            <li>$sum</li>
+                        </ul>
+                        <h5><a href="http://goo.gl/2utcZS" target="_blank">http://goo.gl/2utcZS</a></h5>
+                    </section>
+                    <section>
+                        <h2>Group aggregation operators</h2>
+                        <h4>Very simple, this is an example:</h4>
+                        <pre><code data-trim class="bash" contenteditable>
+# Find the minimum value of the age field for only those documents with _id starting with the letter 'a'
+> db.users.aggregate( [
+    { $match: { _id: /^a/ } },
+    { $group: { _id: 0, minAge: { $min: "$age"} } }
+] )
+                        </code></pre>
+                        <h5>The link below will show all of 'em</h5>
+                        <a href="http://goo.gl/8QN479" target="_blank">http://goo.gl/8QN479</a>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Mini Assignment : $match</h2>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Thinking about the zipcode collection, write an aggregation query with a single match phase that filters for zipcodes with greater than 100,000 people.</li>
+                            <li>You may need to look up the use of the $gt operator in the MongoDB docs.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Mini Assignment : $sum</h2>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Write an aggregation query to sum up the population (pop) by state and put the result in a field called population.</li>
+                            <li>Don't use a compound _id key (you don't need one and the quiz checker is not expecting one).</li>
+                            <li>The collection name is zips. so something along the lines of db.zips.aggregate...</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Mini Assignment : $addToSet</h2>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>Again the collection will be called zips.</li>
+                            <li>You can deduce what your result column names should be from the above output.</li>
+                            <li>ignore the issue that a city may have the same name in two different states and is in fact two different cities in that case - for eg Springfield, MO and Springfield, MA.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Mini Assignment : $project</h2>
+                        <ul style="font-size: 0.7em; line-height: 1em;">
+                            <li>So that the checker works properly, please specify what you want to do with the _id key as the first item.</li>
+                            <li>The other items should be ordered as stated below.</li>
+                            <li>As before, assume the collection is called zips. You are running only the projection part of the pipeline for this quiz..</li>
+                        </ul>
+                        <pre><code data-trim class="json" contenteditable>
+{
+    "city" : "acmar",
+    "pop" : 6055,
+    "state" : "AL",
+    "zip" : "35004"
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Mini Assignment : Mind blower</h2>
+                        <h4>What would be the value of c in the result from this aggregation query</h4>
+                        <pre><code data-trim class="json" contenteditable>
+{ "_id" : 0, "a" : 0, "b" : 0, "c" : 21 }
+{ "_id" : 1, "a" : 0, "b" : 0, "c" : 54 }
+{ "_id" : 2, "a" : 0, "b" : 1, "c" : 52 }
+{ "_id" : 3, "a" : 0, "b" : 1, "c" : 17 }
+{ "_id" : 4, "a" : 1, "b" : 0, "c" : 22 }
+{ "_id" : 5, "a" : 1, "b" : 0, "c" : 5 }
+{ "_id" : 6, "a" : 1, "b" : 1, "c" : 87 }
+{ "_id" : 7, "a" : 1, "b" : 1, "c" : 97 }
+                        </code></pre>
+                        <pre><code data-trim class="bash" contenteditable>
+db.fun.aggregate([
+    {$match:{a:0}},
+    {$sort:{c:-1}},
+    {$group:{_id:"$a", c:{$first:"$c"}}}
+])
+                        </code></pre>
+                    </section>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Thank you</h2>
+                    <h4 style="color: #fff">We hope to see you next week!</h4>
+                    <h5>MongoDB - Finally! Let’s create a Node.js and MongoDB application!</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
