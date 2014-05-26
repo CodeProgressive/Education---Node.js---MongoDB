@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Node.js & MongoDB course | Workshop 01</title>
+
+		<meta name="description" content="The first workshop in our Node.js & MongoDB course">
+		<meta name="author" content="Jimmy Aupperlee">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="assets/css/reveal.min.css">
+		<link rel="stylesheet" href="assets/css/theme/beige.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="assets/css/zenburn.css">
+
+        <style>
+            .row-even:not(:last-child),
+            .row-odd:not(:last-child) {
+                border-bottom: 1px #8b743d solid;
+            }
+        </style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="assets/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section data-background="assets/img/title.jpg" data-background-repeat="no-repeat" data-background-size="cover"></section>
+                <section>
+                    <section>
+                        <h2>Repetition: Explanation of explain</h2>
+                        <h5>Finding your way through the database</h5>
+                        <pre><code data-trim class="bash" contenteditable>
+# Get details of you last find query
+> db.collection.find().explain()
+                        </code></pre>
+                        <pre><code data-trim class="json" contenteditable>
+{
+  "cursor" : "Cursor Type and Index",
+  "isMultiKey" : boolean,
+  "n" : num,
+  "nscannedObjects" : num,
+  "nscanned" : num,
+  "nscannedObjectsAllPlans" : num,
+  "nscannedAllPlans" : num,
+  "scanAndOrder" : boolean,
+  "indexOnly" : boolean,
+  "nYields" : num,
+  "nChunkSkips" : num,
+  "millis" : num,
+  "indexBounds" : { index bounds },
+  "allPlans" : [
+                 { "cursor" : "Cursor Type and Index",
+                   "n" : num,
+                   "nscannedObjects" : num,
+                   "nscanned" : num,
+                   "indexBounds" : { index bounds }
+                 },
+                  ...
+               ],
+  "oldPlan" : {
+                "cursor" : "Cursor Type and Index",
+                "indexBounds" : { index bounds }
+              }
+  "server" : "host:port",
+}
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Repetition: So many indexes!</h2>
+                        <h4>Different type of indexes:</h4>
+                        <ul>
+                            <li>Single field</li>
+                            <li>Coumpound</li>
+                            <li>Multikey</li>
+                            <li>Geospatial</li>
+                            <li>Text</li>
+                            <li>Hashed</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition: Indexing options</h2>
+                        <h4>Every index type has these options</h4>
+                        <ul>
+                            <li>Unique: 'boolean'</li>
+                            <li>Sparse: 'boolean'</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Repetition: Aggregation? Dafuq?</h2>
+                        <h4>Advanced searching the database for 'übermenschen'</h4>
+                        <ul style="margin-bottom: 20px;">
+                            <li>Grouping documents for searches</li>
+                            <li>Grouping documents by fields</li>
+                            <li>Deciding what you will search for</li>
+                            <li>Many group operators</li>
+                        </ul>
+                        <h5><a href="http://goo.gl/Q3Fm7w" target="_blank">http://goo.gl/Q3Fm7w</a></h5>
+                    </section>
+                </section>
+                <section>
+                    <img src="assets/img/npm.png" alt="NPM" style="border: none; box-shadow: none;" />
+                    <h2>Installation of MongoDB module</h2>
+                    <pre><code data-trim class="bash" contenteditable>
+# Install MongoDB module package
+$ npm install mongodb
+                    </code></pre>
+                    <h5><a href="http://goo.gl/Hn10BQ " target="_blank">http://goo.gl/Hn10BQ</a></h5>
+                </section>
+                <section>
+                    <h2>Nothing changed!</h2>
+                    <h4>Usage of MongoDB inside NodeJS</h4>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Require the MongoDB package, instantiate it.
+var MongoClient = require('mongodb').MongoClient;
+
+// Connect to the MongoDB server
+MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
+
+    // MongoDB normal coding!
+
+    // Default insert query.
+    db.collection('test').insert({hello: 'world'});
+
+    // Default update query.
+    db.collection('test').update({hi: 'here'}, {$set: {hi: 'there'}});
+
+});
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Repetition: Errors, errors, ERRORS!</h2>
+                    <h4>Always catch your errors properly! Always!</h4>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Throw error from specific piece of code.
+if(err) throw err;
+
+// Try specific piece of code.
+try {
+
+    //Run some code here
+
+} catch(err) {
+
+    // Handle errors here
+
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Remember what a cursor is?</h2>
+                    <h4>The MongoDB find function returns one! Use it wisely</h4>
+                    <pre><code data-trim class="javascript" contenteditable>
+// Find something in the database, returning a cursor.
+var cursor = collection.find([query], [fields], [options]);
+
+// Convert the cursor to an array
+cursor.toArray(function(err, documents){
+
+    // Do more stuff!
+
+});
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Please rate us now!</h2>
+                    <h4>We would like to encourage you to fill in the form below.</h4>
+                    <h5>Be as honest and critical as you can!</h5>
+                    <h5><a href="http://goo.gl/j2N5RN" target="_blank" style="text-transform: none;">http://goo.gl/j2N5RN</a></h5>
+                </section>
+                <section data-background="#27ae60">
+                    <h2 style="color: #fff">Questions or comments?</h2>
+                    <h4 style="color: #fff">About anything regarding node.js / mongodb?...</h4>
+                </section>
+                <section data-background="#2980b9">
+                    <h2 style="color: #fff">Fin!</h2>
+                    <h4 style="color: #fff">Thank you so much for attending.</h4>
+                    <h5>You are all NodeJS and MongoDB developers from now on.</h5>
+                </section>
+            </div>
+		</div>
+
+		<script src="js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'beige', // available themes are in /css/theme
+				transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
